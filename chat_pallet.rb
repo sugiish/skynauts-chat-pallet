@@ -1,4 +1,4 @@
-ABILITIES = %w[技術 感覚 教養 身体]
+ABILITIES = %w[身体 技術 感覚 教養]
 ACTION_REQUIREMENTS = {
   '砲撃' => %w[技術 感覚],
   '修理' => %w[技術 教養],
