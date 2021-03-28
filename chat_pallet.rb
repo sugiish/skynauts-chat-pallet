@@ -35,4 +35,13 @@ def convert_chat_pallet(label, strong, weak)
   end
 end
 
+if ARGV.empty?
+  puts '「歯車の塔の探空士」用のチャットパレット生成器です。'
+  puts '第一引数に得意な能力、第二引数に苦手な能力を指定するとチャットパレットを出力します。'
+  puts
+  puts '利用例'
+  puts '$ ruby chat_pallet.rb 技術 感覚'
+  exit 0
+end
+
 print_chat_pallets(ARGV[0], ARGV[1])
