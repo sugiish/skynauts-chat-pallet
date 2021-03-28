@@ -25,7 +25,7 @@ end
 def convert_chat_pallet(label, strong, weak)
   case
   when strong && weak
-    "3d6kh2>=? 【#{label}+-】"
+    "3d6kh2>=? 【#{label}±】"
   when strong
     "3d6kh2>=? 【#{label}+】"
   when weak
