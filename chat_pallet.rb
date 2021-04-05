@@ -35,7 +35,7 @@ def convert_chat_pallet(label, strong, weak)
   end
 end
 
-if ARGV.size != 2
+if ARGV.empty?
   puts '「歯車の塔の探空士」用のチャットパレット生成器です。'
   puts '第一引数に得意な能力、第二引数に苦手な能力を指定するとチャットパレットを出力します。'
   puts '能力は「技術」「感覚」「教養」「身体」の4つから選択します。'
