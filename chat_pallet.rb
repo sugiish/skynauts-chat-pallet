@@ -1,14 +1,16 @@
 ABILITIES = %w[身体 技術 感覚 教養]
-ACTION_REQUIREMENTS = {
-  '砲撃' => %w[技術 感覚],
-  '修理' => %w[技術 教養],
-  '操舵' => %w[感覚 教養],
-  '侵入' => %w[身体 技術],
-  '白兵' => %w[身体 技術],
-  '偵察' => %w[身体 感覚],
-  '大揺れ' => %w[身体 感覚],
-  '消火' => %w[身体 教養],
-}
+
+Action = Struct.new(:label, :requirements, :difficulty)
+ACTIONS = [
+  Action.new('砲撃', %w[技術 感覚], 7),
+  Action.new('修理', %w[技術 教養], 7),
+  Action.new('操舵', %w[感覚 教養], '?'),
+  Action.new('侵入', %w[身体 技術], 7),
+  Action.new('白兵', %w[身体 技術], '?'),
+  Action.new('偵察', %w[身体 感覚], 7),
+  Action.new('大揺れ', %w[身体 感覚], 7),
+  Action.new('消火', %w[身体 教養], 7),
+]
 
 def print_chat_pallets(strong_point, weak_point)
   ABILITIES.each do |ability|
@@ -17,21 +19,21 @@ def print_chat_pallets(strong_point, weak_point)
   ABILITIES.combination(2).each do |ability_tuple|
     puts convert_chat_pallet(ability_tuple.join('・'), ability_tuple.include?(strong_point), ability_tuple.include?(weak_point))
   end
-  ACTION_REQUIREMENTS.each do |action, requirements|
-    puts convert_chat_pallet(action, requirements.include?(strong_point), requirements.include?(weak_point))
+  ACTIONS.each do |action|
+    puts convert_chat_pallet(action.label, action.requirements.include?(strong_point), action.requirements.include?(weak_point), action.difficulty)
   end
 end
 
-def convert_chat_pallet(label, strong, weak)
+def convert_chat_pallet(label, strong, weak, difficulty='?')
   case
   when strong && weak
-    "3d6kh2>=? 【#{label}±】"
+    "3d6kh2>=#{difficulty} 【#{label}±】"
   when strong
-    "3d6kh2>=? 【#{label}+】"
+    "3d6kh2>=#{difficulty} 【#{label}+】"
   when weak
-    "2d6>=? 【#{label}-】"
+    "2d6>=#{difficulty} 【#{label}-】"
   else
-    "2d6>=? 【#{label}】"
+    "2d6>=#{difficulty} 【#{label}】"
   end
 end
 
