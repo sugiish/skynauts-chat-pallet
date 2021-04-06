@@ -1,3 +1,5 @@
+require 'optparse'
+
 ABILITIES = %w[身体 技術 感覚 教養]
 
 Action = Struct.new(:label, :requirements, :difficulty)
@@ -37,14 +39,25 @@ def convert_chat_pallet(label, strong, weak, difficulty='?')
   end
 end
 
-if ARGV.empty?
-  puts '「歯車の塔の探空士」用のチャットパレット生成器です。'
-  puts '第一引数に得意な能力、第二引数に苦手な能力を指定するとチャットパレットを出力します。'
-  puts '能力は「技術」「感覚」「教養」「身体」の4つから選択します。'
-  puts
-  puts '利用例'
-  puts '$ ruby chat_pallet.rb 技術 感覚'
+op = OptionParser.new
+options = {}
+op.on('-s', '--specialist', '専門分野') { |v| options[:specialist] = true }
+op.on('-c', '--craftsman', '職人肌') { |v| options[:craftsman] = true }
+op.on('-h', '--help', 'show this help') do
+  print(<<~USAGE)
+    「歯車の塔の探空士」用のチャットパレット生成器です。
+    第一引数に得意な能力、第二引数に苦手な能力を指定するとチャットパレットを出力します。
+    得意な能力は,で複数指定できます。
+    能力は「技術」「感覚」「教養」「身体」の4つから選択します。
+
+    利用例
+    $ ruby chat_pallet.rb 技術 感覚
+    $ ruby chat_pallet.rb 技術,身体 感覚
+
+    #{op}
+  USAGE
   exit 0
 end
 
-print_chat_pallets(ARGV[0].split(','), ARGV[1])
+args = op.parse(ARGV)
+print_chat_pallets(args[0].split(','), args[1])
