@@ -30,7 +30,7 @@ def convert_chat_pallet(label, strong_count, weak, options, difficulty='?')
   case
   when strong_count > 0 && weak
     if options[:craftsman]
-      "3d6kh2>=#{difficulty} 【#{label}+】"
+      "3d6kh2>=#{difficulty} 【#{label}+(-)】"
     else
       "3d6kh2>=#{difficulty} 【#{label}±】"
     end
