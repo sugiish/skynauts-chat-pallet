@@ -7,6 +7,7 @@ ACTIONS = [
   Action.new('砲撃', %w[技術 感覚], 7),
   Action.new('修理', %w[技術 教養], 7),
   Action.new('操舵', %w[感覚 教養], '?'),
+  Action.new('回避', %w[感覚 教養], 7),
   Action.new('侵入', %w[身体 技術], 7),
   Action.new('白兵', %w[身体 技術], '?'),
   Action.new('偵察', %w[身体 感覚], 7),
