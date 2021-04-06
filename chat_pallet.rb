@@ -47,11 +47,7 @@ def convert_chat_pallet(label, strong_count, weak, options, difficulty='?')
   end
 end
 
-op = OptionParser.new
-options = {}
-op.on('-s', '--specialist', '専門分野') { |v| options[:specialist] = true }
-op.on('-c', '--craftsman', '職人肌') { |v| options[:craftsman] = true }
-op.on('-h', '--help', 'show this help') do
+def show_help_and_exit(op)
   print(<<~USAGE)
     「歯車の塔の探空士」用のチャットパレット生成器です。
     第一引数に得意な能力、第二引数に苦手な能力を指定するとチャットパレットを出力します。
@@ -67,5 +63,12 @@ op.on('-h', '--help', 'show this help') do
   exit 0
 end
 
+op = OptionParser.new
+options = {}
+op.on('-s', '--specialist', '専門分野') { |v| options[:specialist] = true }
+op.on('-c', '--craftsman', '職人肌') { |v| options[:craftsman] = true }
+op.on('-h', '--help', 'show this help') { show_help_and_exit(op) }
+
 args = op.parse(ARGV)
+show_help_and_exit(op) if args.empty?
 print_chat_pallets(args[0].split(','), args[1], options)
