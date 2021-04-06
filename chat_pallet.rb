@@ -12,15 +12,15 @@ ACTIONS = [
   Action.new('消火', %w[身体 教養], 7),
 ]
 
-def print_chat_pallets(strong_point, weak_point)
+def print_chat_pallets(strong_points, weak_point)
   ABILITIES.each do |ability|
-    puts convert_chat_pallet(ability, ability == strong_point, ability == weak_point)
+    puts convert_chat_pallet(ability, strong_points.include?(ability), ability == weak_point)
   end
   ABILITIES.combination(2).each do |ability_tuple|
-    puts convert_chat_pallet(ability_tuple.join('・'), ability_tuple.include?(strong_point), ability_tuple.include?(weak_point))
+    puts convert_chat_pallet(ability_tuple.join('・'), ability_tuple.any? { |v| strong_points.include?(v) }, ability_tuple.include?(weak_point))
   end
   ACTIONS.each do |action|
-    puts convert_chat_pallet(action.label, action.requirements.include?(strong_point), action.requirements.include?(weak_point), action.difficulty)
+    puts convert_chat_pallet(action.label, action.requirements.any? { |v| strong_points.include?(v) }, action.requirements.include?(weak_point), action.difficulty)
   end
 end
 
@@ -47,4 +47,4 @@ if ARGV.empty?
   exit 0
 end
 
-print_chat_pallets(ARGV[0], ARGV[1])
+print_chat_pallets(ARGV[0].split(','), ARGV[1])
