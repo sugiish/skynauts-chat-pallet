@@ -14,24 +14,32 @@ ACTIONS = [
   Action.new('消火', %w[身体 教養], 7),
 ]
 
-def print_chat_pallets(strong_points, weak_point)
+def print_chat_pallets(strong_points, weak_point, options)
   ABILITIES.each do |ability|
-    puts convert_chat_pallet(ability, strong_points.include?(ability), ability == weak_point)
+    puts convert_chat_pallet(ability, strong_points.count(ability), ability == weak_point, options)
   end
   ABILITIES.combination(2).each do |ability_tuple|
-    puts convert_chat_pallet(ability_tuple.join('・'), ability_tuple.any? { |v| strong_points.include?(v) }, ability_tuple.include?(weak_point))
+    puts convert_chat_pallet(ability_tuple.join('・'), ability_tuple.count { |v| strong_points.include?(v) }, ability_tuple.include?(weak_point), options)
   end
   ACTIONS.each do |action|
-    puts convert_chat_pallet(action.label, action.requirements.any? { |v| strong_points.include?(v) }, action.requirements.include?(weak_point), action.difficulty)
+    puts convert_chat_pallet(action.label, action.requirements.count { |v| strong_points.include?(v) }, action.requirements.include?(weak_point), options, action.difficulty)
   end
 end
 
-def convert_chat_pallet(label, strong, weak, difficulty='?')
+def convert_chat_pallet(label, strong_count, weak, options, difficulty='?')
   case
-  when strong && weak
-    "3d6kh2>=#{difficulty} 【#{label}±】"
-  when strong
-    "3d6kh2>=#{difficulty} 【#{label}+】"
+  when strong_count > 0 && weak
+    if options[:craftsman]
+      "3d6kh2>=#{difficulty} 【#{label}+】"
+    else
+      "3d6kh2>=#{difficulty} 【#{label}±】"
+    end
+  when strong_count > 0
+    if options[:specialist] && strong_count == 2
+      "4d6kh2>=#{difficulty} 【#{label}*】"
+    else
+      "3d6kh2>=#{difficulty} 【#{label}+】"
+    end
   when weak
     "2d6>=#{difficulty} 【#{label}-】"
   else
@@ -60,4 +68,4 @@ op.on('-h', '--help', 'show this help') do
 end
 
 args = op.parse(ARGV)
-print_chat_pallets(args[0].split(','), args[1])
+print_chat_pallets(args[0].split(','), args[1], options)
